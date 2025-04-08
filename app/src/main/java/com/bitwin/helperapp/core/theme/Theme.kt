@@ -1,6 +1,7 @@
 package com.bitwin.helperapp.core.theme
 
 import android.app.Activity
+import androidx.compose.ui.graphics.Color
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
