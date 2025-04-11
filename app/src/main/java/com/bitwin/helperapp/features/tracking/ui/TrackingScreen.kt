@@ -1,12 +1,7 @@
 package com.bitwin.helperapp.features.tracking.ui
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,119 +10,95 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.bitwin.helperapp.core.shared_components.AppBar
+import com.bitwin.helperapp.features.tracking.data.TrackingRequest
+import com.bitwin.helperapp.features.tracking.logic.TrackingViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.*
 
 @Composable
 fun TrackingScreen(
     modifier: Modifier = Modifier,
     onNotificationsClick: () -> Unit = {}
 ) {
-    val notificationCount = remember { mutableIntStateOf(3) }
-    
-    Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        AppBar(
-            title = "Localisation et Suivi",
-            trailingIcon = Icons.Default.Notifications,
-            backgroundColor = Color(0xFFFFFFFF), // Use explicit hex color for pure white
-            onTrailingIconClick = onNotificationsClick,
-            showDot = notificationCount.value > 0
-        )
-        
-        Column(
+    val viewModel: TrackingViewModel = hiltViewModel()
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.trackPosition(TrackingRequest(latitude = 36.752887, longitude = 3.042048))
+    }
+
+    Scaffold(
+        topBar = {
+            AppBar(
+                title = "Localisation et Suivi",
+                trailingIcon = Icons.Default.Notifications,
+                backgroundColor = Color(0xFFFFFFFF),
+                onTrailingIconClick = onNotificationsClick,
+                showDot = false
+            )
+        },
+        modifier = modifier
+    ) { paddingValues ->
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth()
+                .fillMaxHeight() 
+                .padding(paddingValues)
         ) {
-            // Map placeholder
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp)
-                    .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(16.dp))
-                    .border(2.dp, MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(16.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.LocationOn,
-                        contentDescription = "Map",
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(64.dp)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = "Carte de suivi",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+            when {
+                uiState.isLoading -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
-            }
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            // Tracking information
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.LocationOn,
-                            contentDescription = "Location",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Position actuelle:",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
-                    Text(
-                        text = "123 Rue des Exemples, Alger",
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(start = 32.dp, top = 4.dp)
-                    )
+                uiState.response != null -> {
+                    val trackingResponse = uiState.response!!
+                    val latLng = LatLng(trackingResponse.currentLatitude, trackingResponse.currentLongitude)
+                    val cameraPosition = CameraPosition.fromLatLngZoom(latLng, 15f)
+                    val cameraPositionState = rememberCameraPositionState { position = cameraPosition }
                     
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowUp,
-                            contentDescription = "Direction",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Distance parcourue:",
-                            style = MaterialTheme.typography.titleMedium
-                        )
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        GoogleMap(
+                            modifier = Modifier.fillMaxSize(),
+                            cameraPositionState = cameraPositionState,
+                            uiSettings = MapUiSettings(
+                                zoomControlsEnabled = true,
+                                zoomGesturesEnabled = true,
+                                mapToolbarEnabled = false,
+                                compassEnabled = true,
+                                myLocationButtonEnabled = true
+                            )
+                        ) {
+                            Marker(
+                                state = MarkerState(latLng),
+                                title = "Current Location"
+                            )
+                        }
+                        
+                        Card(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(start = 16.dp, end = 72.dp, bottom = 16.dp)
+                                .width(300.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFFFFFFFF)),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                        ) {
+                            Text(
+                                text = "Suivez en direct la position de [Nom de l'utilisateur] et intervenez si nécessaire.",
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                     }
-                    Text(
-                        text = "2,3 km",
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(start = 32.dp, top = 4.dp)
-                    )
                 }
-            }
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            Button(
-                onClick = { /* Refresh tracking */ },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Actualiser la position")
+                uiState.error != null -> {
+                    Text("Error: ${uiState.error}", modifier = Modifier.align(Alignment.Center))
+                }
+                else -> {
+                    Text("No data", modifier = Modifier.align(Alignment.Center))
+                }
             }
         }
     }

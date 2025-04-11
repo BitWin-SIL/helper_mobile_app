@@ -3,7 +3,6 @@ package com.bitwin.helperapp.features.home.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
@@ -52,11 +51,8 @@ fun HomeScreen(
                     bottom = 72.dp + bottomPadding.calculateBottomPadding() // Add nav bar height to bottom padding
                 )
         ) {
-            val scrollState = rememberScrollState()
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
+                modifier = Modifier.fillMaxSize()
             ) {
                 when (selectedTab) {
                     0 -> {

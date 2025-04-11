@@ -40,5 +40,11 @@ object AppModule {
     fun provideLoginRepository(helperApi: HelperApi): LoginRepository {
         return LoginRepository(helperApi)
     }
+    
+    @Singleton
+    @Provides
+    fun provideTrackingRepository(): com.bitwin.helperapp.features.tracking.domain.TrackingRepository {
+        return com.bitwin.helperapp.features.tracking.domain.TrackingRepository()
+    }
 
 }
