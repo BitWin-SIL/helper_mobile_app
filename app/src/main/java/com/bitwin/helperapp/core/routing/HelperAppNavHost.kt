@@ -22,7 +22,7 @@ fun HelperAppNavHost(
         modifier = modifier
     ) {
         composable(Screen.Home.route) {
-            HomeScreen(navController = navController)
+            HomeScreen()
         }
         composable(Screen.Register.route) {
             RegisterScreen(navController = navController)
