@@ -8,12 +8,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bitwin.helperapp.core.routing.Screen
 import com.bitwin.helperapp.features.home.ui.HomeScreen
+import com.bitwin.helperapp.features.register.ui.RegisterScreen
 
 @Composable
 fun HelperAppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Screen.Home.route
+    startDestination: String = Screen.Register.route
 ) {
     NavHost(
         navController = navController,
@@ -22,6 +23,9 @@ fun HelperAppNavHost(
     ) {
         composable(Screen.Home.route) {
             HomeScreen(navController = navController)
+        }
+        composable(Screen.Register.route) {
+            RegisterScreen(navController = navController)
         }
     }
 }
