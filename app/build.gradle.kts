@@ -63,6 +63,7 @@ dependencies {
     implementation (libs.kotlinx.coroutines.android)
     implementation (libs.androidx.lifecycle.viewmodel.ktx)
     implementation (libs.androidx.lifecycle.runtime.ktx.v261)
+    implementation (libs.google.accompanist.systemuicontroller)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
