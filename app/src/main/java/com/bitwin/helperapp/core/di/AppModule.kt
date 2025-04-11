@@ -1,5 +1,4 @@
 package com.bitwin.helperapp.core.di
-
 import com.bitwin.helperapp.core.api.HelperApi
 import com.bitwin.helperapp.features.register.domain.RegisterRepository
 import com.bitwin.helperapp.features.login.domain.LoginRepository
