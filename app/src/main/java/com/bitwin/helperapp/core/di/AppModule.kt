@@ -1,7 +1,8 @@
 package com.bitwin.helperapp.core.di
 
-import com.bitwin.helperapp.features.register.data.RegisterApi
+import com.bitwin.helperapp.core.api.HelperApi
 import com.bitwin.helperapp.features.register.domain.RegisterRepository
+import com.bitwin.helperapp.features.login.domain.LoginRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,13 +26,20 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRegisterApi(retrofit: Retrofit): RegisterApi {
-        return retrofit.create(RegisterApi::class.java)
+    fun provideHelperApi(retrofit: Retrofit): HelperApi {
+        return retrofit.create(HelperApi::class.java)
     }
 
     @Singleton
     @Provides
-    fun provideRegisterRepository(registerApi: RegisterApi): RegisterRepository {
-        return RegisterRepository(registerApi)
+    fun provideRegisterRepository(helperApi: HelperApi): RegisterRepository {
+        return RegisterRepository(helperApi)
     }
+
+    @Singleton
+    @Provides
+    fun provideLoginRepository(helperApi: HelperApi): LoginRepository {
+        return LoginRepository(helperApi)
+    }
+
 }

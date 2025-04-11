@@ -1,24 +1,24 @@
-package com.bitwin.helperapp.features.register.domain
+package com.bitwin.helperapp.features.login.domain
 
 import com.bitwin.helperapp.core.api.HelperApi
 import com.bitwin.helperapp.core.utilities.Resource
-import com.bitwin.helperapp.features.register.data.RegisterRequest
-import com.bitwin.helperapp.features.register.data.RegisterResponse
+import com.bitwin.helperapp.features.login.data.LoginRequest
+import com.bitwin.helperapp.features.login.data.LoginResponse
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 import retrofit2.HttpException
 import java.io.IOException
 
 @ActivityScoped
-class RegisterRepository @Inject constructor(
+class LoginRepository @Inject constructor(
     private val helperApi: HelperApi
 ) {
-    suspend fun register(request: RegisterRequest): Resource<RegisterResponse> {
+    suspend fun login(request: LoginRequest): Resource<LoginResponse> {
         return try {
-            val response = helperApi.register(request)
+            val response = helperApi.login(request)
             Resource.Success(response)
         } catch (e: HttpException) {
-            Resource.Error("Une erreur inconnue s'est produite : ${e.message()}")
+            Resource.Error("Une erreur s'est produite: ${e.message()}")
         } catch (e: IOException) {
             Resource.Error("Impossible d'atteindre le serveur. Vérifiez votre connexion Internet.")
         }

@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bitwin.helperapp.core.routing.Screen
 import com.bitwin.helperapp.features.home.ui.HomeScreen
+import com.bitwin.helperapp.features.login.ui.LoginScreen
 import com.bitwin.helperapp.features.register.ui.RegisterScreen
 
 @Composable
@@ -26,6 +27,9 @@ fun HelperAppNavHost(
         }
         composable(Screen.Register.route) {
             RegisterScreen(navController = navController)
+        }
+        composable(Screen.Login.route) {
+            LoginScreen(navController = navController)
         }
     }
 }
