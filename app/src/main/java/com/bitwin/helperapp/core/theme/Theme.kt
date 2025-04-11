@@ -83,7 +83,10 @@ fun HelperAppTheme(
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = Color.White.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
+            window.navigationBarColor = Color.White.toArgb() // Set navigation bar to white
+            val insetsController = WindowCompat.getInsetsController(window, view)
+            insetsController.isAppearanceLightStatusBars = true
+            insetsController.isAppearanceLightNavigationBars = true // Make navigation bar icons dark
         }
     }
 

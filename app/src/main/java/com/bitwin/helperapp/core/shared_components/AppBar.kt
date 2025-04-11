@@ -53,7 +53,6 @@ fun AppBar(
     contentColor: Color = Color.Black
 ) {
     Surface(
-        tonalElevation = 3.dp,
         color = backgroundColor
     ) {
         Box(

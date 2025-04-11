@@ -13,8 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bitwin.helperapp.core.shared_components.AppBar
 
@@ -23,7 +21,7 @@ fun TrackingScreen(
     modifier: Modifier = Modifier,
     onNotificationsClick: () -> Unit = {}
 ) {
-    val notificationCount = remember { mutableStateOf(3) }
+    val notificationCount = remember { mutableIntStateOf(3) }
     
     Column(
         modifier = modifier.fillMaxSize(),
@@ -32,6 +30,7 @@ fun TrackingScreen(
         AppBar(
             title = "Localisation et Suivi",
             trailingIcon = Icons.Default.Notifications,
+            backgroundColor = Color(0xFFFFFFFF), // Use explicit hex color for pure white
             onTrailingIconClick = onNotificationsClick,
             showDot = notificationCount.value > 0
         )

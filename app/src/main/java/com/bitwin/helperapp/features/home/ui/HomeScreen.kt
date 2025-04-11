@@ -2,6 +2,8 @@ package com.bitwin.helperapp.features.home.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
@@ -15,11 +17,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.statusBars
+import com.bitwin.helperapp.core.shared_components.AppBar
 import com.bitwin.helperapp.features.tracking.ui.TrackingScreen
 import com.bitwin.helperapp.features.assistance.ui.AssistanceScreen
 import com.bitwin.helperapp.features.profile.ui.ProfileScreen
@@ -29,56 +32,64 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
-    
-    // Calculate safe area insets
-    val contentPadding = WindowInsets.safeDrawing
+
+    val statusBarPadding = WindowInsets.statusBars
         .only(WindowInsetsSides.Top)
         .asPaddingValues()
-    
+
     val bottomPadding = WindowInsets.navigationBars
         .only(WindowInsetsSides.Bottom)
         .asPaddingValues()
-    
+
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 56.dp + bottomPadding.calculateBottomPadding()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .padding(
+                    top = statusBarPadding.calculateTopPadding(),
+                    bottom = 72.dp + bottomPadding.calculateBottomPadding() // Add nav bar height to bottom padding
+                )
         ) {
-            when (selectedTab) {
-                0 -> {
-                    TrackingScreen()
-                }
-                1 -> {
-                    AssistanceScreen()
-                }
-                2 -> {
-                    ProfileScreen()
+            val scrollState = rememberScrollState()
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+            ) {
+                when (selectedTab) {
+                    0 -> {
+                        TrackingScreen()
+                    }
+                    1 -> {
+                        AssistanceScreen()
+                    }
+                    2 -> {
+                        ProfileScreen()
+                    }
                 }
             }
         }
-        Column(
+        Surface(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .height(72.dp + bottomPadding.calculateBottomPadding()),
+            color = Color.White,
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(72.dp)
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(bottom = bottomPadding.calculateBottomPadding())
-            ) {
+            Box(modifier = Modifier.fillMaxSize()) {
                 Row(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(72.dp)
+                        .align(Alignment.TopCenter),
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Top, // Changed from Center to Top
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxHeight()
@@ -90,35 +101,26 @@ fun HomeScreen(
                                 .height(3.dp)
                                 .background(if (selectedTab == 0) MaterialTheme.colorScheme.primary else Color.Transparent)
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "Home",
+                            tint = if (selectedTab == 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            modifier = Modifier.size(24.dp)
+                        )
                         if (selectedTab == 0) {
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Icon(
-                                imageVector = Icons.Default.Home,
-                                contentDescription = "Home",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(24.dp)
-                            )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 text = "Accueil",
                                 color = MaterialTheme.colorScheme.primary,
                                 style = MaterialTheme.typography.labelLarge,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(bottom = 8.dp)
+                                textAlign = TextAlign.Center
                             )
-                        } else {
-                            Spacer(modifier = Modifier.weight(1f))
-                            Icon(
-                                imageVector = Icons.Default.Home,
-                                contentDescription = "Home",
-                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                                modifier = Modifier.size(24.dp)
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
                         }
                     }
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Top, // Changed from Center to Top
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxHeight()
@@ -130,35 +132,26 @@ fun HomeScreen(
                                 .height(3.dp)
                                 .background(if (selectedTab == 1) MaterialTheme.colorScheme.primary else Color.Transparent)
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Icon(
+                            imageVector = Icons.Outlined.Add,
+                            contentDescription = "Appel Vidéo",
+                            tint = if (selectedTab == 1) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            modifier = Modifier.size(24.dp)
+                        )
                         if (selectedTab == 1) {
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Icon(
-                                imageVector = Icons.Outlined.Add,
-                                contentDescription = "Appel Vidéo",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(24.dp)
-                            )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 text = "Appel Vidéo",
                                 color = MaterialTheme.colorScheme.primary,
                                 style = MaterialTheme.typography.labelLarge,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(bottom = 8.dp)
+                                textAlign = TextAlign.Center
                             )
-                        } else {
-                            Spacer(modifier = Modifier.weight(1f))
-                            Icon(
-                                imageVector = Icons.Outlined.Add,
-                                contentDescription = "Appel Vidéo",
-                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                                modifier = Modifier.size(24.dp)
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
                         }
                     }
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Top, // Changed from Center to Top
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxHeight()
@@ -170,31 +163,21 @@ fun HomeScreen(
                                 .height(3.dp)
                                 .background(if (selectedTab == 2) MaterialTheme.colorScheme.primary else Color.Transparent)
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = "Profil",
+                            tint = if (selectedTab == 2) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                            modifier = Modifier.size(24.dp)
+                        )
                         if (selectedTab == 2) {
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Icon(
-                                imageVector = Icons.Default.Person,
-                                contentDescription = "Profil",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(24.dp)
-                            )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 text = "Profil",
                                 color = MaterialTheme.colorScheme.primary,
                                 style = MaterialTheme.typography.labelLarge,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(bottom = 8.dp)
+                                textAlign = TextAlign.Center
                             )
-                        } else {
-                            Spacer(modifier = Modifier.weight(1f))
-                            Icon(
-                                imageVector = Icons.Default.Person,
-                                contentDescription = "Profil",
-                                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                                modifier = Modifier.size(24.dp)
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
                         }
                     }
                 }
