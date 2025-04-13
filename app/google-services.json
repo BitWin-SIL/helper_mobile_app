@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "937798072876",
+    "project_id": "helper-mobile-app",
+    "storage_bucket": "helper-mobile-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:937798072876:android:8dc37114e665374aea6f89",
+        "android_client_info": {
+          "package_name": "com.bitwin.helperapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQT6Wz9UoM5w1hR6yjCmrOT9FtlmVb1IU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
