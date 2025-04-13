@@ -3,11 +3,13 @@ package com.bitwin.helperapp.features.tracking.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bitwin.helperapp.core.shared_components.AppBar
 import com.bitwin.helperapp.features.tracking.data.TrackingRequest
@@ -94,12 +96,80 @@ fun TrackingScreen(
                     }
                 }
                 uiState.error != null -> {
-                    Text("Error: ${uiState.error}", modifier = Modifier.align(Alignment.Center))
+                    ErrorView(
+                        errorMessage = getFormattedErrorMessage(uiState.error!!),
+                        onRetry = {
+                            viewModel.trackPosition(TrackingRequest(latitude = 36.752887, longitude = 3.042048))
+                        },
+                        modifier = Modifier.align(Alignment.Center)
+                    )
                 }
                 else -> {
-                    Text("No data", modifier = Modifier.align(Alignment.Center))
+                    Text("Aucune donnée disponible", 
+                         modifier = Modifier
+                             .align(Alignment.Center)
+                             .padding(16.dp),
+                         style = MaterialTheme.typography.bodyLarge,
+                         textAlign = TextAlign.Center
+                    )
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ErrorView(
+    errorMessage: String,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .padding(16.dp)
+            .fillMaxWidth(0.8f),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Refresh,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.error,
+            modifier = Modifier.size(48.dp)
+        )
+        
+        Text(
+            text = "Erreur de suivi",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.error
+        )
+        
+        Text(
+            text = errorMessage,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center
+        )
+        
+        Button(
+            onClick = onRetry,
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+        ) {
+            Text("Réessayer")
+        }
+    }
+}
+
+private fun getFormattedErrorMessage(error: String): String {
+    return when {
+        error.contains("timeout", ignoreCase = true) -> 
+            "La connexion au serveur a expiré. Veuillez vérifier votre connexion internet et réessayer."
+        error.contains("network", ignoreCase = true) -> 
+            "Problème de connexion réseau. Veuillez vérifier votre connexion internet et réessayer."
+        error.contains("permission", ignoreCase = true) -> 
+            "Accès à la localisation refusé. Veuillez activer les permissions de localisation dans les paramètres."
+        error.contains("unauthorized", ignoreCase = true) || error.contains("401", ignoreCase = true) -> 
+            "Vous n'êtes pas autorisé à accéder à cette fonctionnalité. Veuillez vous reconnecter."
+        else -> 
+            "Une erreur inattendue s'est produite. Veuillez réessayer ultérieurement ou contacter le support technique."
     }
 }

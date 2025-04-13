@@ -2,6 +2,7 @@
 accompanistSystemuicontrollerVersion = "0.32.0"
 agp = "8.8.2"
 coreSplashscreen = "1.0.1"
+githubPostgrestKt = "1.4.3"
 hiltAndroid = "2.48"
 hiltNavigationCompose = "1.2.0"
 kotlin = "2.0.0"
@@ -21,6 +22,7 @@ playServicesLocationVersion = "21.3.0"
 playServicesMapsVersion = "19.1.0"
 timber = "5.0.1"
 retrofit = "2.9.0"
+animationCoreLintVersion = "1.8.0-rc03"
 
 
 [libraries]
@@ -30,7 +32,9 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 androidx-lifecycle-runtime-ktx-v261 = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtxVersion" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+github-postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "githubPostgrestKt" }
 google-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontrollerVersion" }
+gotrue-kt = { module = "io.github.jan-tennert.supabase:gotrue-kt", version.ref = "githubPostgrestKt" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -51,9 +55,11 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsComposeVersion" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocationVersion" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMapsVersion" }
+realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "githubPostgrestKt" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.9.0" }
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+androidx-animation-core-lint = { group = "androidx.compose.animation", name = "animation-core-lint", version.ref = "animationCoreLintVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

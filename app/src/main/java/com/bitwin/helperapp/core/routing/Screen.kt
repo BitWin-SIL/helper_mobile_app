@@ -7,6 +7,7 @@ sealed class Screen(val route: String) {
     data object Register : Screen("register")
     data object Assistance : Screen("assistance")
     data object Notifications : Screen("notifications")
+    data object EditPersonalInfoScreen : Screen("edit_personal_info")
 
     
     companion object {
@@ -18,6 +19,7 @@ sealed class Screen(val route: String) {
                 route == Register.route -> Register
                 route == Assistance.route -> Assistance
                 route == Notifications.route -> Notifications
+                route == EditPersonalInfoScreen.route -> EditPersonalInfoScreen
                 else -> Home
             }
         }

@@ -2,7 +2,6 @@ package com.bitwin.helperapp.features.home.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
@@ -21,13 +20,14 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.statusBars
-import com.bitwin.helperapp.core.shared_components.AppBar
+import androidx.navigation.NavHostController
 import com.bitwin.helperapp.features.tracking.ui.TrackingScreen
 import com.bitwin.helperapp.features.assistance.ui.AssistanceScreen
 import com.bitwin.helperapp.features.profile.ui.ProfileScreen
 
 @Composable
 fun HomeScreen(
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
@@ -48,7 +48,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(
                     top = statusBarPadding.calculateTopPadding(),
-                    bottom = 72.dp + bottomPadding.calculateBottomPadding() // Add nav bar height to bottom padding
+                    bottom = 72.dp + bottomPadding.calculateBottomPadding()
                 )
         ) {
             Box(
@@ -62,7 +62,9 @@ fun HomeScreen(
                         AssistanceScreen()
                     }
                     2 -> {
-                        ProfileScreen()
+                        ProfileScreen(
+                            navController
+                        )
                     }
                 }
             }

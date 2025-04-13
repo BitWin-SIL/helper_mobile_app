@@ -2,6 +2,7 @@ package com.bitwin.helperapp.core.di
 import com.bitwin.helperapp.core.api.HelperApi
 import com.bitwin.helperapp.features.register.domain.RegisterRepository
 import com.bitwin.helperapp.features.login.domain.LoginRepository
+import com.bitwin.helperapp.features.profile.domain.ProfileRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,5 +47,10 @@ object AppModule {
     fun provideTrackingRepository(): com.bitwin.helperapp.features.tracking.domain.TrackingRepository {
         return com.bitwin.helperapp.features.tracking.domain.TrackingRepository()
     }
-
+    
+    @Singleton
+    @Provides
+    fun provideProfileRepository(helperApi: HelperApi): ProfileRepository {
+        return ProfileRepository(helperApi)
+    }
 }
