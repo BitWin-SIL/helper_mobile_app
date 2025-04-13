@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
     id("org.jetbrains.kotlin.kapt")
+    id("com.google.gms.google-services")
 }
 
 val localProperties = Properties().apply {
@@ -83,6 +84,7 @@ dependencies {
     implementation (libs.github.postgrest.kt)
     implementation (libs.realtime.kt)
     implementation (libs.gotrue.kt)
+    implementation(libs.firebase.bom)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
