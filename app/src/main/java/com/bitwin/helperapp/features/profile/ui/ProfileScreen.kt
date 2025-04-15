@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.bitwin.helperapp.core.routing.Screen
 import com.bitwin.helperapp.core.shared_components.AppBar
 import com.bitwin.helperapp.core.theme.Gray
 import com.bitwin.helperapp.core.theme.LightGray
@@ -174,7 +175,7 @@ fun ProfileScreen(
                                         title = "Gérer les utilisateurs suivis",
                                         subtitle = null,
                                         showAlert = false,
-                                        onClick = { navController.navigate("manage_followed_users") }
+                                        onClick = { navController.navigate(Screen.AssistanceRequests.route) }
                                     )
 
                                     Divider(
@@ -214,7 +215,7 @@ fun ProfileScreen(
                                 }
                             }
 
-                            Spacer(modifier = Modifier.height(24.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
 
                             Text(
                                 text = "Plus",
@@ -308,11 +309,11 @@ fun ProfileMenuItem(
 
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium
             )
 

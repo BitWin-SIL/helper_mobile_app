@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.bitwin.helperapp.core.theme.HelperAppTheme
 import com.bitwin.helperapp.core.theme.Primary
 import com.bitwin.helperapp.core.theme.Accent
@@ -66,7 +67,7 @@ fun AppBar(
                     contentDescription = "Back",
                     tint = contentColor,
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(20.dp)
                         .clickable { onBackClick() }
                         .align(Alignment.CenterStart)
                 )
@@ -74,7 +75,9 @@ fun AppBar(
             
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontSize = 18.sp,
+                ),
                 color = contentColor,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.align(Alignment.Center)

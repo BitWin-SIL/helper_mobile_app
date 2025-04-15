@@ -59,7 +59,9 @@ fun HomeScreen(
                         TrackingScreen()
                     }
                     1 -> {
-                        AssistanceScreen()
+                        AssistanceScreen(
+                            navController
+                        )
                     }
                     2 -> {
                         ProfileScreen(

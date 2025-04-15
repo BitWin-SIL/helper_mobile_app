@@ -13,6 +13,7 @@ import com.bitwin.helperapp.features.login.ui.LoginScreen
 import com.bitwin.helperapp.features.profile.ui.EditPersonalInfoScreen
 import com.bitwin.helperapp.features.profile.ui.ProfileScreen
 import com.bitwin.helperapp.features.register.ui.RegisterScreen
+import com.bitwin.helperapp.features.association_requests.ui.AssistanceRequestsScreen
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -60,5 +61,9 @@ fun HelperAppNavHost(
                 email = email
             )
         }
+        composable(Screen.AssistanceRequests.route) {
+            AssistanceRequestsScreen(navController = navController)
+        }
+
     }
 }

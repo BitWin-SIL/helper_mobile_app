@@ -3,6 +3,7 @@ import com.bitwin.helperapp.core.api.HelperApi
 import com.bitwin.helperapp.features.register.domain.RegisterRepository
 import com.bitwin.helperapp.features.login.domain.LoginRepository
 import com.bitwin.helperapp.features.profile.domain.ProfileRepository
+import com.bitwin.helperapp.features.association_requests.domain.AssistanceRequestRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,5 +53,11 @@ object AppModule {
     @Provides
     fun provideProfileRepository(helperApi: HelperApi): ProfileRepository {
         return ProfileRepository(helperApi)
+    }
+
+    @Singleton
+    @Provides
+    fun provideAssistanceRequestRepository(helperApi: HelperApi): AssistanceRequestRepository {
+        return AssistanceRequestRepository(helperApi)
     }
 }
