@@ -12,6 +12,7 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinxCoroutinesAndroid = "1.7.3"
+kotlinxCoroutinesAndroidVersion = "1.6.0"
 kotlinxCoroutinesCore = "1.7.0"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
@@ -19,11 +20,15 @@ composeBom = "2024.04.01"
 lifecycleRuntimeKtxVersion = "2.6.1"
 mapsComposeVersion = "2.15.0"
 navigationCompose = "2.8.9"
+okhttpVersion = "4.10.0"
 playServicesLocationVersion = "21.3.0"
 playServicesMapsVersion = "19.1.0"
 timber = "5.0.1"
 retrofit = "2.9.0"
 animationCoreLintVersion = "1.8.0-rc03"
+firebaseCommonKtxVersion = "21.0.0"
+firebaseMessagingKtxVersion = "24.1.1"
+media3CommonKtxVersion = "1.6.1"
 
 
 [libraries]
@@ -53,8 +58,10 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+kotlinx-coroutines-android-v160 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroidVersion" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsComposeVersion" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttpVersion" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocationVersion" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMapsVersion" }
 realtime-kt = { module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "githubPostgrestKt" }
@@ -62,6 +69,9 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.9.0" }
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 androidx-animation-core-lint = { group = "androidx.compose.animation", name = "animation-core-lint", version.ref = "animationCoreLintVersion" }
+firebase-common-ktx = { group = "com.google.firebase", name = "firebase-common-ktx", version.ref = "firebaseCommonKtxVersion" }
+firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtxVersion" }
+androidx-media3-common-ktx = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "media3CommonKtxVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

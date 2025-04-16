@@ -1,5 +1,6 @@
 package com.bitwin.helperapp.features.tracking.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
@@ -58,6 +59,7 @@ fun TrackingScreen(
                     val latLng = LatLng(trackingResponse.currentLatitude, trackingResponse.currentLongitude)
                     val cameraPosition = CameraPosition.fromLatLngZoom(latLng, 15f)
                     val cameraPositionState = rememberCameraPositionState { position = cameraPosition }
+                    var mapLoaded by remember { mutableStateOf(false) }
                     
                     Box(modifier = Modifier.fillMaxSize()) {
                         GoogleMap(
@@ -69,14 +71,25 @@ fun TrackingScreen(
                                 mapToolbarEnabled = false,
                                 compassEnabled = true,
                                 myLocationButtonEnabled = true
-                            )
+                            ),
+                            onMapLoaded = { mapLoaded = true }
                         ) {
                             Marker(
                                 state = MarkerState(latLng),
                                 title = "Current Location"
                             )
                         }
-                        
+                        if (!mapLoaded) {
+                            // Overlay a loading indicator while the map is loading.
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Color.White.copy(alpha = 0.5f)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        }
                         Card(
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)

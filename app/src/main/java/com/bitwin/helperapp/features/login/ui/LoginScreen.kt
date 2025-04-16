@@ -208,7 +208,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
                 onClick = {
                     if (validate()) {
                         val request = LoginRequest(email = email, password = password)
-                        viewModel.loginUser(request)
+                        viewModel.loginUser(request, context as? android.app.Activity)
                     }
                 },
                 enabled = screenState !is LoginScreenState.Loading,

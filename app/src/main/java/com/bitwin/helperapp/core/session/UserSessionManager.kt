@@ -16,6 +16,7 @@ class UserSessionManager @Inject constructor(context: Context) {
         private const val KEY_IS_LOGGED_IN = "is_logged_in"
         private const val KEY_USER_ID = "user_id"
         private const val DEFAULT_USER_ID = ""
+        private const val KEY_FCM_TOKEN_SENT = "fcm_token_sent"
     }
 
     private val sharedPrefs: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -31,10 +32,19 @@ class UserSessionManager @Inject constructor(context: Context) {
         return sharedPrefs.getString(KEY_USER_ID, DEFAULT_USER_ID) ?: DEFAULT_USER_ID
     }
 
+    fun isFcmTokenSent(): Boolean {
+        return sharedPrefs.getBoolean(KEY_FCM_TOKEN_SENT, false)
+    }
+
+    fun setFcmTokenSent(sent: Boolean) {
+        sharedPrefs.edit().putBoolean(KEY_FCM_TOKEN_SENT, sent).apply()
+    }
+
     fun saveUserSession(userId: String) {
         sharedPrefs.edit().apply {
             putBoolean(KEY_IS_LOGGED_IN, true)
             putString(KEY_USER_ID, userId)
+            putBoolean(KEY_FCM_TOKEN_SENT, false)
             apply()
         }
         _authState.value = true

@@ -36,7 +36,6 @@ data class AssistanceRequestDto(
     
     private fun parseDate(dateString: String): Date {
         return try {
-            // API returns ISO 8601 format
             java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
                 .apply { timeZone = TimeZone.getTimeZone("UTC") }
                 .parse(dateString) ?: Date()
@@ -47,7 +46,6 @@ data class AssistanceRequestDto(
 }
 
 data class CreateAssistanceRequestResponse(
-    val status: String,
-    val message: String,
+    @SerializedName("success") val success: Boolean,
     val data: AssistanceRequestDto?
 )

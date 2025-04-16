@@ -1,8 +1,6 @@
 package com.bitwin.helperapp.features.assistance.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Call
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.*
@@ -30,6 +27,7 @@ import com.bitwin.helperapp.features.association_requests.ui.AssistanceRequest
 import com.bitwin.helperapp.features.association_requests.ui.AssistanceRequestStatus
 import com.bitwin.helperapp.features.association_requests.ui.AssistanceRequestsViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AssistanceScreen(
     navController: NavController,
@@ -41,6 +39,15 @@ fun AssistanceScreen(
     val statusBarPadding = androidx.compose.foundation.layout.WindowInsets.statusBars
         .only(androidx.compose.foundation.layout.WindowInsetsSides.Top)
         .asPaddingValues()
+
+    val showAddRequestSheet = remember { mutableStateOf(false) }
+    val requestEmail = remember { mutableStateOf("") }
+
+    LaunchedEffect(uiState.sentRequestSuccess) {
+        if (uiState.sentRequestSuccess) {
+            showAddRequestSheet.value = false
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -77,6 +84,44 @@ fun AssistanceScreen(
                         acceptedRequests = acceptedRequests,
                         onCallRequest = { /* Start video call with this contact */ }
                     )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                onClick = { showAddRequestSheet.value = true },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text("Ajouter demande")
+            }
+        }
+    }
+
+    if (showAddRequestSheet.value) {
+        ModalBottomSheet(
+            onDismissRequest = { showAddRequestSheet.value = false }
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(text = "Nouvelle demande d'assistance", style = MaterialTheme.typography.titleMedium)
+                Spacer(modifier = Modifier.height(12.dp))
+                TextField(
+                    value = requestEmail.value,
+                    onValueChange = { requestEmail.value = it },
+                    label = { Text("Email") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                if (uiState.error != null) {
+                    Text(text = uiState.error!!, color = Color.Red)
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+                Button(
+                    onClick = { viewModel.addRequest(requestEmail.value) },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Envoyer")
                 }
             }
         }
@@ -265,7 +310,6 @@ fun AssistanceContactItem(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Contact avatar
             Surface(
                 shape = CircleShape,
                 color = Primary.copy(alpha = 0.1f),
@@ -283,7 +327,6 @@ fun AssistanceContactItem(
             
             Spacer(modifier = Modifier.width(16.dp))
             
-            // Contact info
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = request.email,
@@ -298,7 +341,6 @@ fun AssistanceContactItem(
                 )
             }
             
-            // Call button
             IconButton(
                 onClick = { onCallRequest(request) },
                 modifier = Modifier

@@ -1,5 +1,6 @@
 package com.bitwin.helperapp.features.login.logic
 
+import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bitwin.helperapp.core.session.UserSessionManager
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 data class LoginUiState(
@@ -28,7 +30,7 @@ class LoginViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState
 
-    fun loginUser(request: LoginRequest) {
+    fun loginUser(request: LoginRequest, activity: Activity? = null) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null, isSuccess = false) }
             when (val result = loginRepository.login(request)) {

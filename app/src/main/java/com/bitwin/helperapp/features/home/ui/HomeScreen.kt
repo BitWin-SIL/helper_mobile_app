@@ -1,5 +1,7 @@
 package com.bitwin.helperapp.features.home.ui
 
+import android.app.Activity
+import android.content.pm.PackageManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -20,16 +22,40 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.bitwin.helperapp.features.tracking.ui.TrackingScreen
 import com.bitwin.helperapp.features.assistance.ui.AssistanceScreen
 import com.bitwin.helperapp.features.profile.ui.ProfileScreen
+import dagger.hilt.android.lifecycle.HiltViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.bitwin.helperapp.features.home.logic.HomeViewModel
 
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+                (context as? Activity)?.let { activity ->
+                    ActivityCompat.requestPermissions(
+                        activity,
+                        arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                        1001
+                    )
+                }
+            }
+        }
+    }
+
     var selectedTab by remember { mutableIntStateOf(0) }
 
     val statusBarPadding = WindowInsets.statusBars

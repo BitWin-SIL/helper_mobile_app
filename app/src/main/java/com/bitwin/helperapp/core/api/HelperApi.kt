@@ -26,6 +26,6 @@ interface HelperApi {
     @GET("assistance/requests")
     suspend fun getAssistanceRequests(): GetAssistanceRequestsResponse
     
-    @POST("assistance/requests")
+    @POST("/functions/v1/assistance-requests/request-to-assist")
     suspend fun createAssistanceRequest(@Body request: CreateAssistanceRequestBody): CreateAssistanceRequestResponse
 }

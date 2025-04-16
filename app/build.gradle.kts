@@ -28,7 +28,7 @@ android {
         versionCode = 1
         versionName = "1.0"
         manifestPlaceholders["MAPS_API_KEY"] = localProperties.getProperty("MAPS_API_KEY", "")
-
+        buildConfigField("String", "SUPABASE_API_KEY", "\"${localProperties.getProperty("SUPABASE_API_KEY", "")}\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -67,6 +67,9 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.animation.core.lint)
+    implementation(libs.firebase.common.ktx)
+    implementation(libs.firebase.messaging.ktx)
+    implementation(libs.androidx.media3.common.ktx)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.timber)
@@ -84,7 +87,9 @@ dependencies {
     implementation (libs.github.postgrest.kt)
     implementation (libs.realtime.kt)
     implementation (libs.gotrue.kt)
-    implementation(libs.firebase.bom)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.okhttp)
+    implementation(libs.kotlinx.coroutines.android.v160)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

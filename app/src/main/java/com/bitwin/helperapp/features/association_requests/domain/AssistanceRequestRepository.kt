@@ -4,6 +4,7 @@ import com.bitwin.helperapp.core.api.HelperApi
 import com.bitwin.helperapp.core.utilities.Resource
 import com.bitwin.helperapp.features.association_requests.data.AssistanceRequest
 import com.bitwin.helperapp.features.association_requests.data.CreateAssistanceRequestBody
+import com.bitwin.helperapp.features.association_requests.data.CreateAssistanceRequestResponse
 import com.bitwin.helperapp.features.association_requests.ui.AssistanceRequestStatus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -79,44 +80,23 @@ class AssistanceRequestRepository @Inject constructor(
         */
     }
 
-    fun createAssistanceRequest(email: String): Flow<Resource<AssistanceRequest?>> = flow {
+    fun createAssistanceRequest(email: String): Flow<Resource<CreateAssistanceRequestResponse>> = flow {
         emit(Resource.Loading())
-        delay(1500)
-
-        val sampleRequest = AssistanceRequest(
-            id = "new-${System.currentTimeMillis()}",
-            requesterId = "requester_new",
-            respondentId = email,
-            requestType = "TYPE_A",
-            status = AssistanceRequestStatus.Pending.name,
-            message = "New request",
-            createdAt = Date(),
-            acceptedAt = null,
-            completedAt = null
-        )
-
-        emit(Resource.Success(sampleRequest))
-
-        // Real API call commented out for testing
-        /*
         try {
-            emit(Resource.Loading())
-            val body = CreateAssistanceRequestBody(respondentEmail = email)
-            val response = api.createAssistanceRequest(body)
-
-            if (response.status == "success") {
-                val domainRequest = response.data?.toDomainModel()
-                emit(Resource.Success(domainRequest))
+            val requestBody = CreateAssistanceRequestBody(
+                visuallyImpairedEmail = email,
+                visuallyImpairedId = "2",
+                visuallyImpairedName = "John Doe",
+                message = "I would like to be your helper."
+            )
+            val response = api.createAssistanceRequest(requestBody)
+            if (response.success) {
+                emit(Resource.Success(response))
             } else {
-                emit(Resource.Error(response.message))
+                emit(Resource.Error("Request failed"))
             }
-        } catch (e: HttpException) {
-            emit(Resource.Error("Erreur réseau: ${e.message ?: "Une erreur est survenue"}"))
-        } catch (e: IOException) {
-            emit(Resource.Error("Vérifiez votre connexion internet"))
         } catch (e: Exception) {
-            emit(Resource.Error("Une erreur est survenue: ${e.message}"))
+            emit(Resource.Error(e.localizedMessage ?: "Unknown error"))
         }
-        */
     }
 }
