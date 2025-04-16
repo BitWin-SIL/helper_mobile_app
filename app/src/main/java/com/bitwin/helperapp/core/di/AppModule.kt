@@ -27,6 +27,7 @@ object AppModule {
             val request = original.newBuilder()
                 .header("Authorization", "Bearer ${Constant.SUPABASE_API_KEY}")
                 .header("Content-Type", "application/json")
+                .header("apikey", Constant.SUPABASE_API_KEY)
                 .header("api-key", Constant.SUPABASE_API_KEY)
                 .header("Prefer", "return=representation")
                 .build()

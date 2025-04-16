@@ -22,7 +22,6 @@ data class ProfileUiState(
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
-    private val userSessionManager: UserSessionManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProfileUiState())
@@ -36,7 +35,7 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, error = null) }
             
-            val userId = userSessionManager.getUserId()
+            val userId = UserSessionManager.getUserId()
 
             when (val result = profileRepository.getUserInfo(userId)) {
                 is Resource.Success -> {
@@ -53,6 +52,6 @@ class ProfileViewModel @Inject constructor(
     }
     
     fun logout() {
-        userSessionManager.clearSession()
+        UserSessionManager.clearSession()
     }
 }

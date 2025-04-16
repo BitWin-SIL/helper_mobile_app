@@ -24,7 +24,6 @@ data class LoginUiState(
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
-    private val userSessionManager: UserSessionManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -35,7 +34,7 @@ class LoginViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true, error = null, isSuccess = false) }
             when (val result = loginRepository.login(request)) {
                 is Resource.Success -> {
-                    result.data?.id?.let { userSessionManager.saveUserSession(it.toString()) }
+                    result.data?.id?.let { UserSessionManager.saveUserSession(it.toString()) }
                     _uiState.update { it.copy(isLoading = false, isSuccess = true) }
                 }
                 is Resource.Error -> _uiState.update { it.copy(isLoading = false, error = result.message) }

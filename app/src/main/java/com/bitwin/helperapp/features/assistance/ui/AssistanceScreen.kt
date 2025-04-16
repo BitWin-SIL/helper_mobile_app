@@ -6,7 +6,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Call
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Person
@@ -25,7 +24,7 @@ import com.bitwin.helperapp.core.shared_components.AppBar
 import com.bitwin.helperapp.core.theme.*
 import com.bitwin.helperapp.features.association_requests.ui.AssistanceRequest
 import com.bitwin.helperapp.features.association_requests.ui.AssistanceRequestStatus
-import com.bitwin.helperapp.features.association_requests.ui.AssistanceRequestsViewModel
+import com.bitwin.helperapp.features.association_requests.logic.AssistanceRequestsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

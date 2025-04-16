@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -22,17 +21,16 @@ import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -44,9 +42,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.bitwin.helperapp.core.shared_components.AppBar
 import com.bitwin.helperapp.core.theme.*
+import com.bitwin.helperapp.features.association_requests.logic.AssistanceRequestsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlinx.coroutines.launch
+import android.util.Log
 
 enum class AssistanceRequestStatus { Pending, Accepted, Rejected }
 
@@ -66,6 +66,11 @@ fun AssistanceRequestsScreen(
     val uiState by viewModel.uiState.collectAsState()
     var selectedRequest by remember { mutableStateOf<AssistanceRequest?>(null) }
     val scope = rememberCoroutineScope()
+
+    // Add this to debug the UI state
+    LaunchedEffect(uiState) {
+        Log.d("AssocReqScreen", "UI State updated - requests: ${uiState.requests.size}, loading: ${uiState.isLoading}, error: ${uiState.error}")
+    }
 
     val statusBarPadding = WindowInsets.statusBars
         .only(WindowInsetsSides.Top)
@@ -96,54 +101,31 @@ fun AssistanceRequestsScreen(
                 onBackClick = { navController.popBackStack() }
             )
 
-            // Sample data for testing
-            val sampleRequests = remember {
-                listOf(
-                    AssistanceRequest(
-                        id = "1",
-                        email = "user1@example.com",
-                        date = Date(),
-                        status = AssistanceRequestStatus.Pending
-                    ),
-                    AssistanceRequest(
-                        id = "2",
-                        email = "accepted@example.com",
-                        date = Date(System.currentTimeMillis() - 86400000), // yesterday
-                        status = AssistanceRequestStatus.Accepted
-                    ),
-                    AssistanceRequest(
-                        id = "3",
-                        email = "rejected@example.com",
-                        date = Date(System.currentTimeMillis() - 172800000), // 2 days ago
-                        status = AssistanceRequestStatus.Rejected
-                    ),
-                    AssistanceRequest(
-                        id = "4",
-                        email = "longEmail12345@verylongdomainname.example.com",
-                        date = Date(System.currentTimeMillis() - 259200000), // 3 days ago
-                        status = AssistanceRequestStatus.Pending
-                    )
-                )
-            }
-            
-            // Use sample data instead of actual data from API
-            val testRequests = sampleRequests
-            
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.White)
-                    .padding(top = 8.dp),
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .background(Color.White),
+                contentAlignment = Alignment.Center
             ) {
-                // Replace requests with the sample data
-                if (testRequests.isEmpty()) {
-                    EmptyStateView()
-                } else {
-                    RequestsList(
-                        // Use sample data instead of actual data
-                        requests = testRequests,
-                        onRequestClick = { selectedRequest = it }
-                    )
+                when {
+                    uiState.isLoading -> {
+                        CircularProgressIndicator(color = Primary)
+                    }
+                    uiState.error != null -> {
+                        ErrorView(message = uiState.error ?: "Unknown error") {
+                            viewModel.fetchAssistanceRequests()
+                        }
+                    }
+                    uiState.requests.isEmpty() -> {
+                        EmptyStateView()
+                    }
+                    else -> {
+                        RequestsList(
+                            requests = uiState.requests,
+                            onRequestClick = { selectedRequest = it }
+                        )
+                    }
                 }
             }
         }
@@ -393,10 +375,7 @@ fun AddAssociationRequestSheet(
 @Composable
 fun EmptyStateView() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Surface(
@@ -418,7 +397,7 @@ fun EmptyStateView() {
 
         Text(
             text = "Aucune demande d'association",
-            style = MaterialTheme.typography.titleLarge.copy(
+            style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.Bold
             ),
             color = Color(0xFF2A2C35)
@@ -428,7 +407,7 @@ fun EmptyStateView() {
 
         Text(
             text = "Vous n'avez pas encore envoyé de demande d'association à un utilisateur malvoyant.",
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyMedium,
             color = Color(0xFF6B6E7B),
             textAlign = TextAlign.Center
         )
@@ -436,8 +415,8 @@ fun EmptyStateView() {
         Spacer(modifier = Modifier.height(8.dp))
         
         Text(
-            text = "Appuyez sur le bouton + pour envoyer une nouvelle demande.",
-            style = MaterialTheme.typography.bodyLarge,
+            text = "Appuyez sur le bouton + pour envoyer \nune nouvelle demande.",
+            style = MaterialTheme.typography.bodyMedium,
             color = Primary,
             fontWeight = FontWeight.Medium,
             textAlign = TextAlign.Center
@@ -557,9 +536,11 @@ fun RequestItem(
                     modifier = Modifier.weight(1f)
                 ) {
                     Text(
-                        text = request.email,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
+                        text = "ID Malvoyant : ${request.id}",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 16.sp
+                        ),
                         color = Color(0xFF2A2C35),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -744,9 +725,9 @@ fun RequestDetailsDialog(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 DetailItem(
-                    label = "Email",
-                    value = request.email,
-                    icon = Icons.Rounded.Email
+                    label = "ID Malvoyant",
+                    value = request.id,
+                    icon = Icons.Rounded.Person
                 )
 
                 Divider(

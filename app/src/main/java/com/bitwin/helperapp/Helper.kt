@@ -42,7 +42,6 @@ fun HelperApp(viewModel: MainViewModel) {
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val userSessionManager: UserSessionManager
 ) : ViewModel() {
     
     private val _startDestination = MutableStateFlow(Screen.Login.route)
@@ -54,7 +53,7 @@ class MainViewModel @Inject constructor(
     
     private fun checkAuthStatus() {
         viewModelScope.launch {
-            val isLoggedIn = userSessionManager.isLoggedIn()
+            val isLoggedIn = UserSessionManager.isLoggedIn()
             _startDestination.value = if (isLoggedIn) {
                 Screen.Home.route
             } else {

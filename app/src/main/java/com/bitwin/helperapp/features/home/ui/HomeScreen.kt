@@ -31,13 +31,11 @@ import com.bitwin.helperapp.features.assistance.ui.AssistanceScreen
 import com.bitwin.helperapp.features.profile.ui.ProfileScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.bitwin.helperapp.features.home.logic.HomeViewModel
 
 @Composable
 fun HomeScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
 
